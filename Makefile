@@ -8,7 +8,8 @@ RM = rm -f
 
 FUNC =	main.c\
 		error.c\
-		parse_util.c
+		parse_util.c\
+		init_philo.c\
 
 SRCS = $(addprefix src/, $(FUNC))
 OBJS = $(SRCS:c=o)

@@ -64,8 +64,5 @@ int	parse_argv(int argc, char **argv, t_info *info)
 	info->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
 		info->must_eat = ft_atoi(argv[5]);
-	printf("%d %d %d %d %d", info->num_of_philo
-	, info->time_to_die, info->time_to_eat,
-	info->time_to_sleep, info->must_eat);
 	return (SUCCESS);
 }

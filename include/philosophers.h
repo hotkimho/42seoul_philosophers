@@ -24,11 +24,12 @@
 
 typedef struct		s_philo
 {
-	pthread_t				id;
+	pthread_t		thread;
+	int				id;
 	int				state;
 	int				eaten_num;
 	int				time_to_die;
-	long long	last_eat_time;
+	long long		last_eat_time;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	int				is_die;
@@ -53,10 +54,16 @@ int		ft_atoi(const char *str);
 int		validate(char **argv);
 int		parse_argv(int argc, char **argv, t_info *info);
 int		is_space(char c);
+
 //error
 int		error_msg(char *message);
 int		ft_strlen(char *str);
 
+//time
+int	get_time();
 
-
+//init_philo
+int	init_info(t_info *info);
+int	malloc_philo(t_info *info);
+int	init_philo(t_info *info);
 #endif
