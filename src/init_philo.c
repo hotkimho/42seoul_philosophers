@@ -29,6 +29,8 @@ int	malloc_philo(t_info *info)
 		return (FAILURE);
 	if (pthread_mutex_init(&info->print_mutex, NULL))
 		return (FAILURE);
+	if (pthread_mutex_init(&info->die_mutex, NULL))
+		return (FAILURE);
 	return (SUCCESS);
 }
 

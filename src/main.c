@@ -1,4 +1,5 @@
 #include "../include/philosophers.h"
+void	check_death(t_philo *philo);
 
 long long	get_time()
 {
@@ -20,37 +21,23 @@ void	custom_sleep(unsigned int time)
 	}
 }
 
-void	print_msg(t_philo *philo, char *msg)
-{
-	int	time;
-
-	if (philo->info->is_death)
-		return;
-	pthread_mutex_lock(&philo->info->print_mutex);
-	time = get_time() - philo->info->start_time;
-	printf("[%dms] %d %s\n", time, philo->id, msg);
-	pthread_mutex_unlock(&philo->info->print_mutex);
-	return;
-}
 
 void	take_forks(t_philo *philo)
 {
 	if (philo->info->is_death)
 		return;
-	//philo->state = FORK;
 	pthread_mutex_lock(philo->r_fork);
 	pthread_mutex_lock(philo->l_fork);
 	print_msg(philo, FORK_MSG);
 	print_msg(philo, FORK_MSG);
-
 }
 
 void	eat(t_philo *philo)
 {
 	if (philo->info->is_death)
 		return;
-	//philo->state = EAT;
 	print_msg(philo, EAT_MSG);
+	philo->last_eat_time = get_time();
 	custom_sleep(philo->info->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
@@ -69,15 +56,23 @@ void	think(t_philo *philo)
 {
 	if (philo->info->is_death)
 		return;
-	//philo->state = THINK;
 	print_msg(philo, THINK_MSG);
-
 }
 
-//void	check_death(t_philo *philo)
-//{
+void	check_death(t_philo *philo)
+{
+	long long	time;
 
-//}
+	if (philo->info->is_death)
+		return;
+	pthread_mutex_lock(&philo->info->die_mutex);
+	time = get_time() - philo->last_eat_time;
+	if (time > (long long) philo->info->time_to_die)
+		philo->info->is_death = 1;
+	if (philo->info->is_death)
+		print_die(philo, DIE_MSG);
+	pthread_mutex_unlock(&philo->info->die_mutex);
+}
 void *routine(void *param)
 {
 	t_philo	*philo;
@@ -88,12 +83,13 @@ void *routine(void *param)
 
 	if (philo->id % 2 == 0)
 		custom_sleep(philo->info->time_to_eat);
-	while (1)
+	while (!philo->info->is_death)
 	{
 		take_forks(philo);
 		eat(philo);
 		philo_sleep(philo);
 		think(philo);
+		check_death(philo);
 	}
 	return (NULL);
 }
@@ -113,10 +109,14 @@ int main(int argc, char **argv)
 	while (i < info.num_of_philo)
 	{
 		pthread_create(&info.philos[i].thread, NULL, routine, (void *)&info.philos[i]);
-		pthread_detach(info.philos[i].thread);
+		//pthread_detach(info.philos[i].thread);
 		i++;
 	}
-	usleep(100000000);
+	i = 0;
+	while (i < info.num_of_philo)
+		pthread_join(info.philos[i++].thread, NULL);
+	printf("exit\n");
+	//usleep(100000000);
 }
 
 

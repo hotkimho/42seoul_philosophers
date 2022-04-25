@@ -56,6 +56,7 @@ typedef struct		s_info
 	int				is_death;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t print_mutex;
+	pthread_mutex_t die_mutex;
 	t_philo			*philos;
 }					t_info;
 
@@ -77,4 +78,21 @@ long long	get_time();
 int		init_info(t_info *info);
 int		malloc_philo(t_info *info);
 int		init_philo(t_info *info);
+
+//print
+void	print_msg(t_philo *philo, char *msg);
+void	print_die(t_philo *philo, char *msg);
+
+//philo_util
+void	check_death(t_philo *philo);
+long long	get_time();
+void	custom_sleep(unsigned int time);
+
+//philo_thread
+void 	*routine(void *param);
+void	take_forks(t_philo *philo);
+void	eat(t_philo *philo);
+void	philo_sleep(t_philo *philo);
+void	think(t_philo *philo);
+//thread
 #endif
