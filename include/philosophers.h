@@ -21,6 +21,16 @@
 
 # define SUCCESS 0
 # define FAILURE 1
+# define FORK 0
+# define EAT 1
+# define SLEEP 2
+# define THINK 3
+# define DIE 4
+# define FORK_MSG "has taken a fork"
+# define EAT_MSG "is eating"
+# define SLEEP_MSG "is sleeping"
+# define THINK_MSG "is thinking"
+# define DIE_MSG "died"
 
 typedef struct		s_philo
 {
@@ -32,8 +42,7 @@ typedef struct		s_philo
 	long long		last_eat_time;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
-	int				is_die;
-	struct t_info	*info;
+	struct s_info	*info;
 }					t_philo;
 
 typedef struct		s_info
@@ -44,7 +53,9 @@ typedef struct		s_info
 	int				time_to_sleep;
 	int				must_eat;
 	long long		start_time;
+	int				is_death;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t print_mutex;
 	t_philo			*philos;
 }					t_info;
 
@@ -60,10 +71,10 @@ int		error_msg(char *message);
 int		ft_strlen(char *str);
 
 //time
-int	get_time();
+long long	get_time();
 
 //init_philo
-int	init_info(t_info *info);
-int	malloc_philo(t_info *info);
-int	init_philo(t_info *info);
+int		init_info(t_info *info);
+int		malloc_philo(t_info *info);
+int		init_philo(t_info *info);
 #endif

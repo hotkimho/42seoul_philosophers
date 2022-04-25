@@ -1,6 +1,6 @@
 #include "../include/philosophers.h"
 
-int	get_time()
+long long	get_time()
 {
 	struct timeval current;
 	gettimeofday(&current, NULL);
@@ -9,18 +9,91 @@ int	get_time()
 	return (currentTime);
 }
 
+void	custom_sleep(unsigned int time)
+{
+	unsigned int	finish_time;
+
+	finish_time = time + get_time();
+	while (finish_time > (unsigned int)get_time())
+	{
+		usleep(100);
+	}
+}
+
+void	print_msg(t_philo *philo, char *msg)
+{
+	int	time;
+
+	if (philo->info->is_death)
+		return;
+	pthread_mutex_lock(&philo->info->print_mutex);
+	time = get_time() - philo->info->start_time;
+	printf("[%dms] %d %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&philo->info->print_mutex);
+	return;
+}
+
+void	take_forks(t_philo *philo)
+{
+	if (philo->info->is_death)
+		return;
+	//philo->state = FORK;
+	pthread_mutex_lock(philo->r_fork);
+	pthread_mutex_lock(philo->l_fork);
+	print_msg(philo, FORK_MSG);
+	print_msg(philo, FORK_MSG);
+
+}
+
+void	eat(t_philo *philo)
+{
+	if (philo->info->is_death)
+		return;
+	//philo->state = EAT;
+	print_msg(philo, EAT_MSG);
+	custom_sleep(philo->info->time_to_eat);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
+
+void	philo_sleep(t_philo *philo)
+{
+	if (philo->info->is_death)
+		return;
+	//philo->state = SLEEP;
+	print_msg(philo, SLEEP_MSG);
+	custom_sleep(philo->info->time_to_sleep);
+}
+
+void	think(t_philo *philo)
+{
+	if (philo->info->is_death)
+		return;
+	//philo->state = THINK;
+	print_msg(philo, THINK_MSG);
+
+}
+
+//void	check_death(t_philo *philo)
+//{
+
+//}
 void *routine(void *param)
 {
 	t_philo	*philo;
-	int count;
 
 	philo = (t_philo*) param;
-	count = 0;
-	while (count < 10)
+
+	philo->last_eat_time = get_time();
+
+	if (philo->id % 2 == 0)
+		custom_sleep(philo->info->time_to_eat);
+	while (1)
 	{
-		printf("ID : %d(%ds)\n", philo->id, count);
-		sleep(1);
-		count++;
+		take_forks(philo);
+		eat(philo);
+		philo_sleep(philo);
+		think(philo);
 	}
 	return (NULL);
 }
@@ -35,16 +108,15 @@ int main(int argc, char **argv)
 		return (FAILURE);
 	info.start_time = get_time();
 
+
 	int i = 0;
 	while (i < info.num_of_philo)
 	{
 		pthread_create(&info.philos[i].thread, NULL, routine, (void *)&info.philos[i]);
 		pthread_detach(info.philos[i].thread);
-		sleep(1);
 		i++;
 	}
-
-
+	usleep(100000000);
 }
 
 

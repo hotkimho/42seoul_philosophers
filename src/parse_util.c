@@ -56,7 +56,7 @@ int	validate(char **argv)
 int	parse_argv(int argc, char **argv, t_info *info)
 {
 	if (argc != 5 && argc != 6)
-		error_msg("Invalid argument");
+		return (error_msg("Invalid argument"));
 	validate(argv);
 	info->num_of_philo = ft_atoi(argv[1]);
 	info->time_to_die = ft_atoi(argv[2]);
