@@ -12,7 +12,8 @@ FUNC =	main.c\
 		parse.c\
 		init_philo.c\
 		philo_util.c\
-		philo_thread.c\
+		philo_action.c\
+		philo_routine.c\
 		print.c
 
 SRCS = $(addprefix src/, $(FUNC))

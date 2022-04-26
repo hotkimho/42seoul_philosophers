@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_philo.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/27 01:14:02 by hkim2             #+#    #+#             */
+/*   Updated: 2022/04/27 01:14:06 by hkim2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosophers.h"
 
 int	init_info(t_info *info)
@@ -31,8 +43,6 @@ int	malloc_philo(t_info *info)
 	if (pthread_mutex_init(&info->print_mutex, NULL))
 		return (FAILURE);
 	if (pthread_mutex_init(&info->die_mutex, NULL))
-		return (FAILURE);
-	if (pthread_mutex_init(&info->check_mutex, NULL))
 		return (FAILURE);
 	return (SUCCESS);
 }

@@ -1,77 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
+/*   Updated: 2022/04/27 01:22:34 by hkim2            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philosophers.h"
-
-int		check_must_eat(t_info *info)
-{
-	int	idx;
-	int	must_eat;
-
-	must_eat = info->must_eat;
-	idx = 0;
-	while (idx < info->num_of_philo)
-	{
-		if (info->philos[idx].num_of_eat < must_eat)
-			return (FAILURE);
-		idx++;
-	}
-	return (SUCCESS);
-}
-
-void	*check_must_eat_routine(void *param)
-{
-	t_info	*info;
-
-	info = (t_info*) param;
-	while (!info->is_death)
-	{
-		if (!check_must_eat(info))
-		{
-			info->is_death = 1;
-			printf("Finish\n");
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-void	*check_routine(void *param)
-{
-	t_philo		*philo;
-
-	philo = (t_philo*) param;
-	custom_sleep(200);
-	while (!philo->info->is_death)
-	{
-		pthread_mutex_lock(&philo->info->die_mutex);
-		if (!check_death(philo))
-		{
-			print_die(philo, DIE_MSG);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->info->die_mutex);
-	}
-	return (NULL);
-}
 
 int	run_thread(t_info *info)
 {
-	int	idx;
-	int	error;
+	int			idx;
 	pthread_t	check_thread;
 
-	idx = 0;
-	while (idx < info->num_of_philo)
+	idx = -1;
+	while (++idx < info->num_of_philo)
 	{
-		error = pthread_create(&info->philos[idx].thread, NULL, routine, (void *)&info->philos[idx]);
-		if (error)
+		if (pthread_create(&info->philos[idx].thread, NULL,
+				routine, (void *)&info->philos[idx]))
 			return (FAILURE);
-		error = pthread_create(&check_thread, NULL, check_routine, (void *)&info->philos[idx]);
-		if (error)
+		if (pthread_create(&check_thread, NULL,
+				check_routine, (void *)&info->philos[idx]))
 			return (FAILURE);
 		pthread_detach(check_thread);
-		idx++;
 	}
 	if (info->must_eat > 0)
 	{
-		pthread_create(&check_thread, NULL, check_must_eat_routine, (void *)info);
+		if (pthread_create(&check_thread, NULL,
+				check_must_eat_routine, (void *)info))
+			return (FAILURE);
 		pthread_detach(check_thread);
 	}
 	idx = 0;
@@ -80,14 +41,28 @@ int	run_thread(t_info *info)
 	return (SUCCESS);
 }
 
-//int	philo_free(t_info *info)
-//{
+void	philo_free(t_info *info)
+{
+	int	idx;
 
-//}
-int main(int argc, char **argv)
+	idx = 0;
+	while (idx < info->num_of_philo)
+	{
+		pthread_mutex_destroy(&info->forks[idx]);
+		info->philos->l_fork = NULL;
+		info->philos->r_fork = NULL;
+		idx++;
+	}
+	pthread_mutex_destroy(&info->print_mutex);
+	pthread_mutex_destroy(&info->die_mutex);
+	free(info->philos);
+	free(info->forks);
+}
+
+int	main(int argc, char **argv)
 {
 	t_info	info;
-	
+
 	if (parse_argv(argc, argv, &info))
 		return (FAILURE);
 	if (init_philo(&info))
@@ -95,10 +70,7 @@ int main(int argc, char **argv)
 	info.start_time = get_time();
 	if (run_thread(&info))
 		return (FAILURE);
-	printf("exit\n");
-	
+	philo_free(&info);
+	printf("Finish\n");
 	return (SUCCESS);
-	//usleep(100000000);
 }
-
-

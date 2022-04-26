@@ -21,18 +21,13 @@
 
 # define SUCCESS 0
 # define FAILURE 1
-# define FORK 0
-# define EAT 1
-# define SLEEP 2
-# define THINK 3
-# define DIE 4
 # define FORK_MSG "has taken a fork"
 # define EAT_MSG "is eating"
 # define SLEEP_MSG "is sleeping"
 # define THINK_MSG "is thinking"
 # define DIE_MSG "died"
 
-typedef struct		s_philo
+typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
@@ -45,7 +40,7 @@ typedef struct		s_philo
 	struct s_info	*info;
 }					t_philo;
 
-typedef struct		s_info
+typedef struct s_info
 {
 	int				num_of_philo;
 	int				time_to_die;
@@ -55,45 +50,46 @@ typedef struct		s_info
 	long long		start_time;
 	int				is_death;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t print_mutex;
-	pthread_mutex_t die_mutex;
-	pthread_mutex_t check_mutex;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	die_mutex;
 	t_philo			*philos;
 }					t_info;
 
-//parse_util
-int		is_digit(char ch);
-int		ft_atoi(const char *str);
-int		validate(char **argv);
-int		parse_argv(int argc, char **argv, t_info *info);
-int		is_space(char c);
+//parse
+int			is_digit(char ch);
+int			ft_atoi(const char *str);
+int			validate(char **argv);
+int			parse_argv(int argc, char **argv, t_info *info);
+int			is_space(char c);
 
 //error
-int		error_msg(char *message);
-int		ft_strlen(char *str);
-
-//time
-long long	get_time();
+int			error_msg(char *message);
+int			ft_strlen(char *str);
 
 //init_philo
-int		init_info(t_info *info);
-int		malloc_philo(t_info *info);
-int		init_philo(t_info *info);
+int			init_info(t_info *info);
+int			malloc_philo(t_info *info);
+int			init_philo(t_info *info);
 
 //print
-void	print_msg(t_philo *philo, char *msg);
-void	print_die(t_philo *philo, char *msg);
+void		print_msg(t_philo *philo, char *msg);
+void		print_die(t_philo *philo, char *msg);
 
 //philo_util
-int		check_death(t_philo *philo);
-long long	get_time();
-void	custom_sleep(unsigned int time);
+int			check_death(t_philo *philo);
+long long	get_time(void);
+void		custom_sleep(long long time);
+int			check_must_eat(t_info *info);
 
-//philo_thread
-void 	*routine(void *param);
-void	take_forks(t_philo *philo);
-void	eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	think(t_philo *philo);
-//thread
+//philo_action
+void		take_forks(t_philo *philo);
+void		eat(t_philo *philo);
+void		philo_sleep(t_philo *philo);
+void		think(t_philo *philo);
+
+//philo_routine
+void		*routine(void *param);
+void		*check_must_eat_routine(void *param);
+void		*check_routine(void *param);
+
 #endif
