@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/27 01:16:03 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/27 01:49:38 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	*check_routine(void *param)
 		if (!check_death(philo))
 		{
 			print_die(philo, DIE_MSG);
+			philo->info->is_death = 1;
+			pthread_mutex_unlock(&philo->info->die_mutex);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->info->die_mutex);

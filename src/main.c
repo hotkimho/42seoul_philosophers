@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/27 01:22:34 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/27 01:48:29 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,9 @@ int	main(int argc, char **argv)
 		return (FAILURE);
 	philo_free(&info);
 	printf("Finish\n");
+	//while(1)
+	//{
+	//	NULL;
+	//}
 	return (SUCCESS);
 }
