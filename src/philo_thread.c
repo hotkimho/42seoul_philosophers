@@ -25,7 +25,6 @@ void	philo_sleep(t_philo *philo)
 {
 	if (philo->info->is_death)
 		return;
-	//philo->state = SLEEP;
 	print_msg(philo, SLEEP_MSG);
 	custom_sleep(philo->info->time_to_sleep);
 }
@@ -53,7 +52,7 @@ void *routine(void *param)
 		eat(philo);
 		philo_sleep(philo);
 		think(philo);
-		check_death(philo);
 	}
+	printf("end\n");
 	return (NULL);
 }

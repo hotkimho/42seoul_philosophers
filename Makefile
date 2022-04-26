@@ -1,4 +1,4 @@
-NAME = b
+NAME = a
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -11,7 +11,8 @@ FUNC =	main.c\
 		parse.c\
 		init_philo.c\
 		philo_util.c\
-		philo_thread.c
+		philo_thread.c\
+		print.c
 
 SRCS = $(addprefix src/, $(FUNC))
 OBJS = $(SRCS:c=o)
