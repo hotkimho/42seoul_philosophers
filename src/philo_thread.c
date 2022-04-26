@@ -15,6 +15,7 @@ void	eat(t_philo *philo)
 	if (philo->info->is_death)
 		return;
 	print_msg(philo, EAT_MSG);
+	philo->num_of_eat++;
 	philo->last_eat_time = get_time();
 	custom_sleep(philo->info->time_to_eat);
 	pthread_mutex_unlock(philo->l_fork);
@@ -53,6 +54,5 @@ void *routine(void *param)
 		philo_sleep(philo);
 		think(philo);
 	}
-	printf("end\n");
 	return (NULL);
 }

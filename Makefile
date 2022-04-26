@@ -1,7 +1,8 @@
-NAME = a
+NAME = philo
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+# CFLAGS += -g3 -fsanitize=address
 AR = ar rcs
 RM = rm -f
 

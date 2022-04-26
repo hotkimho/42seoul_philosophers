@@ -17,6 +17,7 @@ int	init_info(t_info *info)
 			info->philos[idx].l_fork = &info->forks[idx - 1];
 		info->philos[idx].r_fork = &info->forks[idx];
 		info->philos[idx].info = info;
+		info->philos[idx].num_of_eat = 0;
 	}
 	return (SUCCESS);
 }
@@ -30,6 +31,8 @@ int	malloc_philo(t_info *info)
 	if (pthread_mutex_init(&info->print_mutex, NULL))
 		return (FAILURE);
 	if (pthread_mutex_init(&info->die_mutex, NULL))
+		return (FAILURE);
+	if (pthread_mutex_init(&info->check_mutex, NULL))
 		return (FAILURE);
 	return (SUCCESS);
 }
