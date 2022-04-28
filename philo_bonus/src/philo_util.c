@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:15 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 18:09:12 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 19:40:21 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_must_eat(t_philo *philo)
 	
 	if (philo->num_of_eat < must_eat)
 		return (FAILURE);
-	printf("success\n");
+	//printf("success\n");
 	return (SUCCESS);
 }
 
