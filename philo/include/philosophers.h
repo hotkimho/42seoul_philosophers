@@ -31,7 +31,6 @@ typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
-	int				state;
 	int				num_of_eat;
 	int				time_to_die;
 	long long		last_eat_time;
@@ -91,5 +90,6 @@ void		think(t_philo *philo);
 void		*routine(void *param);
 void		*check_must_eat_routine(void *param);
 void		*check_routine(void *param);
+void		philo_one(t_philo *philo);
 
 #endif
