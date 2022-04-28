@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/27 01:48:29 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:17:45 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,21 @@ void	philo_free(t_info *info)
 	int	idx;
 
 	idx = 0;
-	while (idx < info->num_of_philo)
+	if (info->forks)
 	{
-		pthread_mutex_destroy(&info->forks[idx]);
-		info->philos->l_fork = NULL;
-		info->philos->r_fork = NULL;
-		idx++;
+		while (idx < info->num_of_philo)
+		{
+			pthread_mutex_destroy(&info->forks[idx]);
+			info->philos->l_fork = NULL;
+			info->philos->r_fork = NULL;
+			idx++;
+		}
 	}
 	pthread_mutex_destroy(&info->print_mutex);
 	pthread_mutex_destroy(&info->die_mutex);
-	free(info->philos);
 	free(info->forks);
+	if (info->philos)
+		free(info->philos);
 }
 
 int	main(int argc, char **argv)
@@ -66,15 +70,17 @@ int	main(int argc, char **argv)
 	if (parse_argv(argc, argv, &info))
 		return (FAILURE);
 	if (init_philo(&info))
+	{
+		philo_free(&info);
 		return (FAILURE);
+	}
 	info.start_time = get_time();
 	if (run_thread(&info))
+	{
+		philo_free(&info);
 		return (FAILURE);
+	}
 	philo_free(&info);
 	printf("Finish\n");
-	//while(1)
-	//{
-	//	NULL;
-	//}
 	return (SUCCESS);
 }

@@ -6,17 +6,30 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 01:15:59 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:05:34 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+void	philo_one(t_philo *philo)
+{
+	print_msg(philo, FORK_MSG);
+	custom_sleep(philo->info->time_to_die);
+	print_die(philo, DIE_MSG);
+	philo->info->is_death = 1;
+}
 
 void	*routine(void *param)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)param;
+	if (philo->info->num_of_philo == 1)
+	{
+		philo_one(philo);
+		return (NULL);
+	}
 	philo->last_eat_time = get_time();
 	if (philo->id % 2 == 0)
 		usleep(200);
@@ -55,7 +68,7 @@ void	*check_routine(void *param)
 	while (!philo->info->is_death)
 	{
 		pthread_mutex_lock(&philo->info->die_mutex);
-		if (!check_death(philo))
+		if (!check_death(philo) && philo->info->num_of_philo > 1)
 		{
 			print_die(philo, DIE_MSG);
 			philo->info->is_death = 1;

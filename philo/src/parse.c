@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:04 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/27 01:14:28 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:18:22 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	is_space(char c)
 
 int	ft_atoi(const char *str)
 {
-	long long	value;
+	int			value;
 	int			sign;
 
 	sign = 1;
@@ -74,7 +74,14 @@ int	parse_argv(int argc, char **argv, t_info *info)
 	info->time_to_die = ft_atoi(argv[2]);
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
+	if (info->num_of_philo < 1 || info->time_to_die < 1
+		|| info->time_to_eat < 1 || info->time_to_sleep < 1)
+		return (error_msg("Invalid argument"));
 	if (argc == 6)
+	{
 		info->must_eat = ft_atoi(argv[5]);
+		if (info->must_eat < 1)
+			return (error_msg("Invalid argument"));
+	}
 	return (SUCCESS);
 }
