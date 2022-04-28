@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:14:02 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 01:12:31 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 18:47:32 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	init_sem(t_info *info)
 	if (create_sem(&info->sem_die, info->die, 1))
 		return (FAILURE);
 	if (create_sem(&info->sem_stop, "/sem_stop", 1))
+		return (FAILURE);
+	if (create_sem(&info->sem_must_eat, "/sem_must_eat", 1))
 		return (FAILURE);
 	return (SUCCESS);
 }

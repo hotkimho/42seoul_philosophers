@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 02:00:14 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 18:43:45 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 int	run_process(t_info *info)
 {
 	int			idx;
-	
+	pthread_t	must_thread;
+
+	if (pthread_create(&must_thread, NULL, check_must_eat_routine, (void *)info))
+		return (FAILURE);
+	pthread_detach(must_thread);
 	idx = -1;
 	while (++idx < info->num_of_philo)
 	{
@@ -27,8 +31,6 @@ int	run_process(t_info *info)
 		}
 		usleep(100);
 	}
-	idx = -1;
-
 	return (SUCCESS);
 }
 
@@ -39,14 +41,21 @@ void	philo_free(t_info *info)
 	idx = 0;
 	while (idx < info->num_of_philo)
 	{
-		printf("%d %d exit\n", info->philos[idx].id, info->philos[idx].pid);
-		waitpid(-1, NULL, 0);
 		kill(info->philos[idx].pid, SIGKILL);
-		
-		
 		idx++;
 	}
-
+	//sem_unlink(info->sem_fork);
+	//sem_unlink(info->sem_die);
+	//sem_unlink(info->sem_eat);
+	//sem_unlink(info->sem_print);
+	//sem_unlink(info->sem_stop);
+	//sem_unlink(info->sem_must_eat);
+	//sem_unlink(info->sem_fork);
+	//sem_unlink(info->sem_die);
+	//sem_unlink(info->sem_eat);
+	//sem_unlink(info->sem_print);
+	//sem_unlink(info->sem_stop);
+	//sem_unlink(info->sem_must_eat);
 	free(info->philos);
 }
 
@@ -60,10 +69,15 @@ int	main(int argc, char **argv)
 	if (init_philo(&info))
 		return (FAILURE);
 	info.start_time = get_time();
-	//sem_wait(info.sem_stop);
-	run_process(&info);
-	//sem_wait(info.sem_stop);
+	sem_wait(info.sem_stop);
+	if (run_process(&info))
+		return (FAILURE);
+	sem_wait(info.sem_stop);
 	philo_free(&info);
+	while(1)
+	{
+		NULL;
+	}
 	printf("finish\n");
 	return (SUCCESS);
 }

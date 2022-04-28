@@ -6,25 +6,21 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:15 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 01:36:20 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 18:09:12 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	check_must_eat(t_info *info)
+int	check_must_eat(t_philo *philo)
 {
-	int	idx;
 	int	must_eat;
 
-	must_eat = info->must_eat;
-	idx = 0;
-	while (idx < info->num_of_philo)
-	{
-		if (info->philos[idx].num_of_eat < must_eat)
-			return (FAILURE);
-		idx++;
-	}
+	must_eat = philo->info->must_eat;
+	
+	if (philo->num_of_eat < must_eat)
+		return (FAILURE);
+	printf("success\n");
 	return (SUCCESS);
 }
 

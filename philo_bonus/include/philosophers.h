@@ -53,11 +53,14 @@ typedef struct s_info
 	char			*eat;
 	char			*print;
 	char			*die;
+	char			*stop;
+	char			*must;
 	sem_t			*sem_fork;
 	sem_t			*sem_eat;
 	sem_t			*sem_print;
 	sem_t			*sem_die;
 	sem_t			*sem_stop;
+	sem_t			*sem_must_eat;
 	t_philo			*philos;
 }					t_info;
 
@@ -85,7 +88,7 @@ void		print_die(t_philo *philo, char *msg);
 int			check_death(t_philo *philo);
 long long	get_time(void);
 void		custom_sleep(long long time);
-int			check_must_eat(t_info *info);
+int			check_must_eat(t_philo *philo);
 int			init_sem(t_info *info);
 //philo_action
 void		take_forks(t_philo *philo);

@@ -6,12 +6,13 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 01:59:37 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 18:47:41 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+//3 2 3 2
 void	routine(t_philo *philo)
 {
 	pthread_t	check_thread;
@@ -29,7 +30,6 @@ void	routine(t_philo *philo)
 		think(philo);
 		usleep(100);
 	}
-//	pthread_join(check_thread, NULL);
 	return ;
 }
 
@@ -39,17 +39,25 @@ void	*check_routine(void *param)
 	t_philo		*philo;
 
 	philo = (t_philo *)param;
-	while (!philo->info->is_death)
+	while (1)
 	{
 		sem_wait(philo->info->sem_die);	
 		if (!check_death(philo))
 		{
 			print_die(philo, DIE_MSG);
-			philo->info->is_death = 1;
 			sem_post(philo->info->sem_die);
+			sem_post(philo->info->sem_stop);
 			break ;
 		}
 		sem_post(philo->info->sem_die);
+		//sem_wait(philo->info->sem_die);
+		//if (!check_must_eat(philo))
+		//{
+		//	sem_post(philo->info->sem_die);
+		//	sem_post(philo->info->sem_must_eat);
+		//	break ;
+		//}
+		//sem_post(philo->info->sem_die);
 		usleep(philo->info->time_to_eat);
 	}
 	return (NULL);
@@ -58,15 +66,18 @@ void	*check_routine(void *param)
 void	*check_must_eat_routine(void *param)
 {
 	t_info	*info;
+	int		must_eat_count;
 
 	info = (t_info *)param;
-	while (!info->is_death)
+	must_eat_count = 0;
+	usleep(1000);
+	while (1)
 	{
-		if (!check_must_eat(info))
-		{
-			info->is_death = 1;
-			return (NULL);
-		}
+		sem_wait(info->sem_must_eat);
+		must_eat_count++;
+
+		if (must_eat_count >= info->num_of_philo)
+			sem_post(info->sem_stop);
 	}
 	return (NULL);
 }
