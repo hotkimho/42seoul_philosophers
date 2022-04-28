@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 20:57:04 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:27:08 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	run_process(t_info *info)
 
 	if (info->must_eat > 0)
 	{
-		if (pthread_create(&must_thread, NULL, check_must_eat_routine, (void *)info))
+		if (pthread_create(&must_thread, NULL,
+				check_must_eat_routine, (void *)info))
 			return (FAILURE);
 		pthread_detach(must_thread);
 	}
@@ -60,7 +61,6 @@ int	philo_free(t_info *info)
 	return (SUCCESS);
 }
 
-
 int	main(int argc, char **argv)
 {
 	t_info	info;
@@ -77,6 +77,5 @@ int	main(int argc, char **argv)
 	philo_free(&info);
 	usleep(1000);
 	printf("finish\n");
-	
 	return (SUCCESS);
 }

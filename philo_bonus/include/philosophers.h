@@ -102,6 +102,6 @@ void		*check_must_eat_routine(void *param);
 void		*check_routine(void *param);
 
 //philo_sem
-int		create_sem(sem_t **sem, char *name, unsigned int value);
+int			create_sem(sem_t **sem, char *name, unsigned int value);
 
 #endif

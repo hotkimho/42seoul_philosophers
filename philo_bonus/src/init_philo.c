@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 01:14:02 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 18:47:32 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:26:30 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init_info(t_info *info)
 		info->philos[idx].id = idx + 1;
 		info->philos[idx].info = info;
 		info->philos[idx].num_of_eat = 0;
-		info->philos[idx].last_eat_time = get_time();	
+		info->philos[idx].last_eat_time = get_time();
 	}
 	return (SUCCESS);
 }
@@ -42,7 +42,6 @@ int	init_sem(t_info *info)
 	info->print = "/sem_print";
 	info->fork = "/sem_fork";
 	info->die = "/sem_die";
-	
 	if (create_sem(&info->sem_fork, info->fork, info->num_of_philo))
 		return (FAILURE);
 	if (create_sem(&info->sem_eat, info->eat, 1))

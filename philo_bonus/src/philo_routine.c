@@ -6,20 +6,11 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 20:50:37 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/04/28 23:30:13 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-//int	one_philo(t_info *info)
-//{
-//	print_msg(&info->philos[0], FORK_MSG);
-//	custom_sleep(info->time_to_die);
-//	print_die(&info->philos[0], DIE_MSG);
-//	sem_post(info->sem_stop);
-//	return (SUCCESS);
-//}
 
 void	routine(t_philo *philo)
 {
@@ -28,7 +19,7 @@ void	routine(t_philo *philo)
 	if (philo->id % 2 == 0)
 		usleep(100);
 	philo->last_eat_time = get_time();
-	pthread_create(&check_thread, NULL, check_routine, (void*)philo);
+	pthread_create(&check_thread, NULL, check_routine, (void *)philo);
 	pthread_detach(check_thread);
 	while (1)
 	{
@@ -41,7 +32,6 @@ void	routine(t_philo *philo)
 	return ;
 }
 
-
 void	*check_routine(void *param)
 {
 	t_philo		*philo;
@@ -49,7 +39,7 @@ void	*check_routine(void *param)
 	philo = (t_philo *)param;
 	while (1)
 	{
-		sem_wait(philo->info->sem_die);	
+		sem_wait(philo->info->sem_die);
 		if (!check_death(philo))
 		{
 			print_die(philo, DIE_MSG);
@@ -81,10 +71,8 @@ void	*check_must_eat_routine(void *param)
 	{
 		sem_wait(info->sem_must_eat);
 		must_eat_count++;
-
 		if (must_eat_count >= info->num_of_philo)
 			sem_post(info->sem_stop);
 	}
 	return (NULL);
 }
-
