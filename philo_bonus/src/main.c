@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:27:08 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 04:08:51 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	main(int argc, char **argv)
 	if (init_philo(&info))
 		return (philo_free(&info));
 	info.start_time = get_time();
+	sem_wait(info.sem_must_eat);
 	sem_wait(info.sem_stop);
 	if (run_process(&info))
 		return (philo_free(&info));

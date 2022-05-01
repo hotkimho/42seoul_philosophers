@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:15 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:31:03 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 04:09:43 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,15 @@ int	check_death(t_philo *philo)
 {
 	long long	time;
 
+	sem_wait(philo->info->sem_eat);
 	time = get_time() - philo->last_eat_time;
 	if (time > (long long) philo->info->time_to_die)
+	{
+		philo->is_death = 1;
+		sem_post(philo->info->sem_eat);
 		return (SUCCESS);
+	}
+	sem_post(philo->info->sem_eat);
 	return (FAILURE);
 }
 

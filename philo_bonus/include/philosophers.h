@@ -37,6 +37,7 @@ typedef struct s_philo
 	int				num_of_eat;
 	int				time_to_die;
 	long long		last_eat_time;
+	int				is_death;
 	struct s_info	*info;
 }					t_philo;
 
@@ -48,7 +49,6 @@ typedef struct s_info
 	int				time_to_sleep;
 	int				must_eat;
 	long long		start_time;
-	int				is_death;
 	char			*fork;
 	char			*eat;
 	char			*print;

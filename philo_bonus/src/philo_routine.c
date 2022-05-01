@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:30:13 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 04:08:33 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	routine(t_philo *philo)
 		eat(philo);
 		philo_sleep(philo);
 		think(philo);
-		usleep(100);
+		usleep(10);
 	}
 	return ;
 }
@@ -40,7 +40,7 @@ void	*check_routine(void *param)
 	while (1)
 	{
 		sem_wait(philo->info->sem_die);
-		if (!check_death(philo))
+		if (!check_death(philo) && philo->is_death == 1)
 		{
 			print_die(philo, DIE_MSG);
 			sem_post(philo->info->sem_die);
@@ -56,6 +56,7 @@ void	*check_routine(void *param)
 			break ;
 		}
 		sem_post(philo->info->sem_die);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -72,7 +73,10 @@ void	*check_must_eat_routine(void *param)
 		sem_wait(info->sem_must_eat);
 		must_eat_count++;
 		if (must_eat_count >= info->num_of_philo)
+		{
 			sem_post(info->sem_stop);
+			return (NULL);
+		}
 	}
 	return (NULL);
 }
