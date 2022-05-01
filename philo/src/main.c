@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:40:55 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:17:45 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 03:22:09 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	philo_free(t_info *info)
 	}
 	pthread_mutex_destroy(&info->print_mutex);
 	pthread_mutex_destroy(&info->die_mutex);
+	pthread_mutex_destroy(&info->check_mutex);
+	pthread_mutex_destroy(&info->must_mutex);
 	free(info->forks);
 	if (info->philos)
 		free(info->philos);

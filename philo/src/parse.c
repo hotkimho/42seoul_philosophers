@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:04 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:18:22 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 01:51:12 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,7 @@ int	parse_argv(int argc, char **argv, t_info *info)
 		if (info->must_eat < 1)
 			return (error_msg("Invalid argument"));
 	}
+	else
+		info->must_eat = 0;
 	return (SUCCESS);
 }

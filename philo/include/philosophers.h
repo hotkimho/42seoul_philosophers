@@ -51,6 +51,8 @@ typedef struct s_info
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	die_mutex;
+	pthread_mutex_t	check_mutex;
+	pthread_mutex_t	must_mutex;
 	t_philo			*philos;
 }					t_info;
 
@@ -75,7 +77,7 @@ void		print_msg(t_philo *philo, char *msg);
 void		print_die(t_philo *philo, char *msg);
 
 //philo_util
-int			check_death(t_philo *philo);
+int			check_death(t_philo *philo, long long last_eat_time);
 long long	get_time(void);
 void		custom_sleep(long long time);
 int			check_must_eat(t_info *info);
@@ -91,5 +93,10 @@ void		*routine(void *param);
 void		*check_must_eat_routine(void *param);
 void		*check_routine(void *param);
 void		philo_one(t_philo *philo);
+
+//philo_get
+int			get_is_death(t_philo *philo);
+//philo_set
+void		set_is_death(t_philo *philo);
 
 #endif

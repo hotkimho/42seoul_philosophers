@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:42:18 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/28 23:05:34 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 03:30:44 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	*routine(void *param)
 		eat(philo);
 		philo_sleep(philo);
 		think(philo);
+		usleep(10);
 	}
 	return (NULL);
 }
@@ -47,14 +48,16 @@ void	*check_must_eat_routine(void *param)
 {
 	t_info	*info;
 
-	info = (t_info *)param;
+	info = (t_info *) param;
 	while (!info->is_death)
 	{
 		if (!check_must_eat(info))
-		{
+		{	
+			pthread_mutex_lock(&info->must_mutex);
 			info->is_death = 1;
+			pthread_mutex_unlock(&info->must_mutex);
 			return (NULL);
-		}
+		}	
 	}
 	return (NULL);
 }
@@ -62,21 +65,27 @@ void	*check_must_eat_routine(void *param)
 void	*check_routine(void *param)
 {
 	t_philo		*philo;
+	int			death;
 
 	philo = (t_philo *)param;
+	death = 0;
 	usleep(100);
 	while (!philo->info->is_death)
-	{
+	{	
 		pthread_mutex_lock(&philo->info->die_mutex);
-		if (!check_death(philo) && philo->info->num_of_philo > 1)
+		pthread_mutex_lock(&philo->info->check_mutex);
+		death = check_death(philo, philo->last_eat_time);
+		pthread_mutex_unlock(&philo->info->check_mutex);
+		if (!death && philo->info->num_of_philo > 1)
 		{
 			print_die(philo, DIE_MSG);
+			pthread_mutex_lock(&philo->info->check_mutex);
 			philo->info->is_death = 1;
-			pthread_mutex_unlock(&philo->info->die_mutex);
-			return (NULL);
+			pthread_mutex_unlock(&philo->info->check_mutex);
+			break ;
 		}
 		pthread_mutex_unlock(&philo->info->die_mutex);
-		usleep(philo->info->time_to_eat);
+		usleep(1000);
 	}
 	return (NULL);
 }

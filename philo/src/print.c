@@ -6,7 +6,7 @@
 /*   By: hkim2 <hkim2@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 00:41:21 by hkim2             #+#    #+#             */
-/*   Updated: 2022/04/27 01:49:27 by hkim2            ###   ########.fr       */
+/*   Updated: 2022/05/02 03:26:14 by hkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	print_msg(t_philo *philo, char *msg)
 {
 	int	time;
 
-	if (philo->info->is_death)
-		return ;
 	pthread_mutex_lock(&philo->info->print_mutex);
 	time = get_time() - philo->info->start_time;
 	if (!philo->info->is_death)
