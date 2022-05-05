@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
+  
 int	run_thread(t_info *info)
 {
 	int			idx;
